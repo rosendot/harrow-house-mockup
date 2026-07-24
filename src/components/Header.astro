@@ -1,0 +1,91 @@
+---
+import { navItems, drawerItems } from "../data/nav";
+
+/** Sticky mega-menu header + mobile drawer.
+ *  The design source hard-coded `class="active"` per page; here it's derived
+ *  from the current route so one component serves every page. */
+const path = Astro.url.pathname;
+const isActive = (href: string) => path === href;
+---
+
+<header class="site-header" id="header">
+  <div class="header-bar">
+    <a class="brand" href="/">
+      <span class="name">The Harrow House</span>
+      <span class="est">Est. 1890</span>
+    </a>
+    <nav class="mega-nav">
+      {
+        navItems.map((item) => (
+          <div class="mega-item">
+            <a
+              href={item.href}
+              class={isActive(item.href) ? "active" : undefined}
+              aria-current={isActive(item.href) ? "page" : undefined}
+            >
+              {item.label}
+              {item.columns && <span class="chev" />}
+            </a>
+            {item.columns && (
+              <div class="mega-panel">
+                <div class={`mega-inner cols-${item.cols ?? 3}`}>
+                  {item.columns.map((col) => (
+                    <div class="mega-col">
+                      <h4>{col.heading}</h4>
+                      <ul>
+                        {col.links.map((l) => (
+                          <li>
+                            <a class="mlink" href={l.href}>
+                              <b>{l.label}</b>
+                              <span>{l.blurb}</span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ))
+      }
+    </nav>
+    <div class="header-cta">
+      <a class="btn" href="/rooms/">Book a Room</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- mobile drawer -->
+<div class="drawer-scrim" id="drawerScrim"></div>
+<aside class="drawer" id="drawer" aria-label="Menu">
+  <div class="drawer-head">
+    <span class="brand"><span class="name">The Harrow House</span></span>
+    <button class="drawer-close" id="drawerClose" aria-label="Close">×</button>
+  </div>
+  {
+    drawerItems.map((item) => (
+      <div class="drawer-group">
+        {item.sub ? (
+          <>
+            <button class="drawer-toggle" aria-expanded="false">
+              {item.label} <span class="chev" />
+            </button>
+            <div class="drawer-sub">
+              {item.sub.map((s) => (
+                <a href={s.href}>{s.label}</a>
+              ))}
+            </div>
+          </>
+        ) : (
+          <a href={item.href}>{item.label}</a>
+        )}
+      </div>
+    ))
+  }
+  <a class="btn" href="/rooms/">Book a Room</a>
+</aside>

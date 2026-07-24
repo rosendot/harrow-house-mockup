@@ -1,0 +1,16 @@
+---
+/** Sand-colored conversion banner. Headline and button differ per page. */
+interface Props {
+  title: string;
+  cta?: string;
+  href?: string;
+}
+const { title, cta = "Book a Room", href = "/rooms/" } = Astro.props;
+---
+
+<section class="section cta-banner">
+  <div class="wrap">
+    <h2>{title}</h2>
+    <a class="btn" href={href}>{cta}</a>
+  </div>
+</section>

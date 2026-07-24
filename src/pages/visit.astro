@@ -1,0 +1,184 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CrumbBar from "../components/CrumbBar.astro";
+
+const ADDRESS = "12 Bayview St, Camden, ME 04843";
+const MAP_EMBED =
+  "https://www.google.com/maps?q=12+Bayview+St,+Camden,+ME+04843&output=embed";
+const DIRECTIONS =
+  "https://www.google.com/maps/dir/?api=1&destination=12+Bayview+St,+Camden,+ME+04843";
+
+const gettingHere = [
+  {
+    icon: "Driving",
+    title: "By car",
+    items: [
+      "About 3 hours up Route 1 from Boston, an easy day's drive.",
+      "Free on-site parking for every room, right behind the house.",
+      "Once you're here, leave the car — everything's walkable.",
+    ],
+  },
+  {
+    icon: "Flying",
+    title: "By air",
+    items: [
+      "Portland (PWM) is about 1.5 hours south with the most flights.",
+      "Bangor (BGR) is about 1 hour north and often quieter.",
+      "We're happy to help arrange a car service from either.",
+    ],
+  },
+  {
+    icon: "Nearby",
+    title: "Once you're here",
+    items: [
+      "The harbor and schooner day sails, four minutes on foot.",
+      "The Mount Battie trail for the view over the bay.",
+      "Shops, galleries, and the lighthouse walk, all in town.",
+    ],
+  },
+];
+
+const hourBlocks = [
+  {
+    label: "Front desk",
+    big: "7am – 9pm",
+    sub: "Every day, someone's here",
+  },
+  {
+    label: "Check-in",
+    big: "3:00pm",
+    sub: "Early? Ask — we'll hold your bags",
+  },
+  { label: "Check-out", big: "11:00am", sub: "Late check-out when we can" },
+  { label: "Breakfast", big: "Till 10am", sub: "Included, made in-house" },
+];
+---
+
+<Layout title="Visit — The Harrow House, Camden Maine">
+  <CrumbBar
+    here="Visit"
+    eyebrow="Visit"
+    title="12 Bayview Street, on the harbor."
+    lede="Three hours up the coast from Boston, four minutes' walk from the schooners. Here's how to find us and what's worth doing once you have."
+  />
+
+  <!-- ===================== MAP EMBED ===================== -->
+  <section class="section mapembed">
+    <div class="wrap">
+      <div class="section-head left">
+        <p class="eyebrow">Find us</p>
+        <h2>On Bayview Street, Camden.</h2>
+      </div>
+      <div class="mapembed-grid">
+        <div class="map-box">
+          <iframe
+            title={`Map to The Harrow House, ${ADDRESS}`}
+            src={MAP_EMBED}
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <div class="contact-card">
+          <h3>The front desk</h3>
+          <div class="contact-row">
+            <div class="k">Address</div>
+            <div class="v">12 Bayview St<br />Camden, ME 04843</div>
+          </div>
+          <div class="contact-row">
+            <div class="k">Phone</div>
+            <div class="v"><a href="tel:+12075550119">207-555-0119</a></div>
+          </div>
+          <div class="contact-row">
+            <div class="k">Email</div>
+            <div class="v">
+              <a href="mailto:stay@harrowhouse.com">stay@harrowhouse.com</a>
+            </div>
+          </div>
+          <div class="contact-row">
+            <div class="k">Front desk</div>
+            <div class="v">7am – 9pm, daily</div>
+          </div>
+          <a
+            class="btn ghost dir-link"
+            href={DIRECTIONS}
+            target="_blank"
+            rel="noopener">Get directions</a
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== LOCATION CARDS ===================== -->
+  <section class="section location">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Getting here</p>
+        <h2>However you're coming.</h2>
+      </div>
+      <div class="loc-grid">
+        {
+          gettingHere.map((c) => (
+            <div class="loc-card">
+              <div class="loc-icon">{c.icon}</div>
+              <h3>{c.title}</h3>
+              <ul>
+                {c.items.map((i) => (
+                  <li>{i}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HOURS CARD ===================== -->
+  <section class="section hours-sec">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Good to know</p>
+        <h2>Hours &amp; times.</h2>
+      </div>
+      <div class="hours-card" data-hours>
+        <div class="hours-status">
+          <span class="dot"></span>
+          <b data-hours-label>Front desk open</b>
+          <span data-hours-sub>Today until 9:00pm</span>
+        </div>
+        <div class="hours-body">
+          {
+            hourBlocks.map((h) => (
+              <div class="hours-block">
+                <h4>{h.label}</h4>
+                <div class="big">{h.big}</div>
+                <div class="sub">{h.sub}</div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT BAR ===================== -->
+  <section class="contact-bar-sec">
+    <div class="contact-bar">
+      <span class="cb-label">Reach us</span>
+      <a class="btn" href="tel:+12075550119">Call</a>
+      <a class="btn ghost" href="mailto:stay@harrowhouse.com">Email</a>
+      <a class="btn ghost" href={DIRECTIONS} target="_blank" rel="noopener">
+        Get Directions
+      </a>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER CTA ===================== -->
+  <section class="footer-cta">
+    <div class="wrap">
+      <p class="eyebrow">See you soon</p>
+      <h2>The porch is waiting.</h2>
+      <a class="btn" href="/rooms/">Book a Room</a>
+    </div>
+  </section>
+</Layout>

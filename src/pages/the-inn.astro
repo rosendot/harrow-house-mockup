@@ -1,0 +1,160 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ImageSlot from "../components/ImageSlot.astro";
+import CrumbBar from "../components/CrumbBar.astro";
+import CtaBanner from "../components/CtaBanner.astro";
+
+const team = [
+  {
+    name: "Nora",
+    role: "Innkeeper",
+    bio: "Runs the front of the house and remembers everything — your name, your anniversary, that you like the corner table.",
+    slot: "Nora — innkeeper, portrait",
+  },
+  {
+    name: "Peter",
+    role: "Innkeeper & Cook",
+    bio: "In the kitchen before dawn. Writes the dinner menu around whatever the boats brought in that afternoon.",
+    slot: "Peter — innkeeper & cook, portrait",
+  },
+  {
+    name: "Halli",
+    role: "Head of House",
+    bio: "Keeps fourteen rooms turning without you ever noticing. Also runs every wedding and retreat on the calendar.",
+    slot: "Halli — head of house, portrait",
+  },
+  {
+    name: "Owen",
+    role: "Breakfast & Dinner Service",
+    bio: "The one pouring your coffee at 7 and your wine at 7. Knows the tide chart and which trail to send you up.",
+    slot: "Owen — breakfast & dinner service, portrait",
+  },
+];
+
+const stats = [
+  { num: "1890", label: "The year it was built" },
+  { num: "14", label: "Rooms, all with a view" },
+  { num: "4 min", label: "Walk to the harbor" },
+  { num: "Year-round", label: "Open every season" },
+];
+
+// The carousel repeats its four seasons twice so the CSS marquee loops
+// seamlessly at translateX(-50%).
+const seasons = [
+  {
+    slot: "Summer porch: rocking chairs, flowers, bright harbor",
+    cap: "Summer on the porch",
+  },
+  { slot: "Autumn foliage around the house, warm colors", cap: "Autumn foliage" },
+  {
+    slot: "Winter snow on the widow's walk, quiet, blue light",
+    cap: "Snow on the widow's walk",
+  },
+  { slot: "Spring garden in bloom, path, green", cap: "The garden in spring" },
+];
+---
+
+<Layout title="The Inn — The Harrow House, Camden Maine">
+  <CrumbBar
+    here="The Inn"
+    eyebrow="The inn"
+    title="A leaking roof, a good feeling, and fifteen years."
+    lede="The Harrow House is run by the people who live in it. Here's how it came to be, and who you'll meet when you arrive."
+  />
+
+  <!-- ===================== TEAM SPOTLIGHT ===================== -->
+  <section class="section spotlight">
+    <div class="wrap">
+      <div class="spotlight-grid">
+        <div class="spotlight-media">
+          <ImageSlot label="Nora and Peter on the porch, warm and candid" />
+          <span class="badge">Nora &amp; Peter, Innkeepers</span>
+        </div>
+        <div class="spotlight-body">
+          <p class="eyebrow">How it started</p>
+          <h2>Bought in 2011 with a leaking roof.</h2>
+          <p>
+            Nora and Peter bought the house in 2011 with a leaking roof and a
+            good feeling. It had been a sea captain's home, then apartments,
+            then empty for a decade — but it still had its bones, its light, and
+            a view of the harbor that stopped them on the sidewalk.
+          </p>
+          <p>
+            They spent two years fixing it themselves, learning as they went,
+            before the first guest ever checked in. Peter took over the kitchen
+            because he couldn't help it; Nora learned every creak in every stair.
+          </p>
+          <p>
+            Fifteen years on, they still live on the third floor. That's the
+            whole idea, really — an inn run by people who are home, who know
+            which room gets the morning light and remember your name the second
+            time you come.
+          </p>
+          <p class="sig">— Nora &amp; Peter</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TEAM OVERLAY ===================== -->
+  <section class="section team-overlay">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Who you'll meet</p>
+        <h2>The people of the house.</h2>
+      </div>
+      <div class="to-grid">
+        {
+          team.map((m) => (
+            <div class="to-card">
+              <ImageSlot label={m.slot} />
+              <div class="to-info">
+                <h3>{m.name}</h3>
+                <p class="role">{m.role}</p>
+                <p class="bio">{m.bio}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== STATS ===================== -->
+  <section class="section stats">
+    <div class="wrap">
+      <div class="stat-grid">
+        {
+          stats.map((s) => (
+            <div class="stat">
+              <div class="num">{s.num}</div>
+              <div class="lbl">{s.label}</div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== INFINITE CAROUSEL ===================== -->
+  <section class="infinite">
+    <div class="section-head">
+      <p class="eyebrow">Through the year</p>
+      <h2>The house, every season.</h2>
+    </div>
+    <div class="ic-mask">
+      <div class="ic-track">
+        {
+          [...seasons, ...seasons].map((s) => (
+            <div class="ic-item">
+              <ImageSlot label={s.slot} />
+              <div class="ic-cap">{s.cap}</div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBanner title="Come see the house." />
+</Layout>

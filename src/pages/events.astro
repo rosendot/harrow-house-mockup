@@ -1,0 +1,317 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ImageSlot from "../components/ImageSlot.astro";
+import CrumbStrip from "../components/CrumbStrip.astro";
+
+const spaces = [
+  {
+    name: "The Parlor",
+    rate: "$1,200",
+    slot: "The Parlor: fireplace, piano, intimate dinner setting",
+    body: "Seats 30 by the fireplace, with a piano in the corner. The room for a rehearsal dinner, a milestone birthday, or a toast that runs long.",
+  },
+  {
+    name: "The Boathouse",
+    rate: "$2,400",
+    slot: "The Boathouse set for dinner, right on the water, open doors",
+    body: "Seats 60 right on the water, doors open to the harbor. Our favorite for a dinner that starts at golden hour and ends under the stars.",
+  },
+  {
+    name: "The Lawn",
+    rate: "$3,800",
+    slot: "The Lawn under a tent, set for a wedding of 120, harbor view",
+    body: "Seats 120 under the tent, the harbor as your backdrop. The full wedding: ceremony by the water, dinner on the grass, dancing after.",
+  },
+];
+
+const steps = [
+  {
+    n: "1",
+    title: "Tell us the date",
+    body: "Send a note with your date and rough headcount. We'll tell you honestly what fits and what's open.",
+  },
+  {
+    n: "2",
+    title: "Tour the spaces",
+    body: "Come walk the house and lawn with us. Coffee on the porch, straight answers, no hard sell.",
+  },
+  {
+    n: "3",
+    title: "We build the plan",
+    body: "One coordinator maps the weekend — rooms, food, flow, timing — and stays with you the whole way.",
+  },
+  {
+    n: "4",
+    title: "You show up and enjoy it",
+    body: "On the day, your only job is to be there. We handle the rest, down to the last chair stacked.",
+  },
+];
+
+const galleryItems = [
+  {
+    wide: true,
+    ph: "Lawn wedding: ceremony by the water, guests seated, harbor",
+    cap: "A June wedding on the lawn.",
+    slot: "Lawn wedding by the water",
+  },
+  {
+    ph: "The boathouse set for dinner, candles, open to the water",
+    cap: "The boathouse, set for sixty.",
+    slot: "Boathouse dinner setting",
+  },
+  {
+    ph: "The parlor mid-toast, guests raising glasses, fireplace",
+    cap: "A toast in the parlor.",
+    slot: "Parlor mid-toast",
+  },
+  {
+    ph: "String lights at dusk over the lawn tables",
+    cap: "String lights, just after sunset.",
+    slot: "String lights at dusk",
+  },
+  {
+    ph: "Retreat circle of chairs on the lawn, morning",
+    cap: "A morning retreat circle.",
+    slot: "Retreat circle on the lawn",
+  },
+  {
+    ph: "Close-up tablescape: linen, flowers, place settings",
+    cap: "The details, up close.",
+    slot: "Tablescape close-up",
+  },
+  {
+    ph: "First dance under the tent, guests around",
+    cap: "First dance under the tent.",
+    slot: "First dance under the tent",
+  },
+  {
+    ph: "Guests gathered on the porch with drinks, afternoon",
+    cap: "Cocktails on the porch.",
+    slot: "Guests on the porch",
+  },
+  {
+    wide: true,
+    ph: "Wide shot of the full tented lawn at night, lit, harbor",
+    cap: "The lawn at full tilt.",
+    slot: "Full tented lawn at night",
+  },
+  {
+    ph: "Sparkler send-off at the front of the house at night",
+    cap: "The send-off.",
+    slot: "Sparkler send-off",
+  },
+];
+---
+
+<Layout title="Events — The Harrow House, Camden Maine">
+  <CrumbStrip here="Events" />
+
+  <!-- ===================== HERO SPLIT ===================== -->
+  <section class="hero-split">
+    <div class="hs2-body">
+      <p class="eyebrow">Events</p>
+      <h1>Weddings, retreats, and long dinners.</h1>
+      <p>
+        Buy out all fourteen rooms and the whole house is yours for the weekend
+        — three spaces to gather in and one coordinator who's done this a
+        hundred times.
+      </p>
+      <p>
+        Small by design. We do one event at a time, so the day is only ever
+        about yours.
+      </p>
+      <div class="cta-row">
+        <a class="btn" href="#inquiry">Request a date</a>
+        <a class="btn ghost on-dark" href="#spaces">See the spaces</a>
+      </div>
+    </div>
+    <div class="hs2-media">
+      <ImageSlot label="The lawn set for a dinner — long table, string lights, harbor beyond, dusk" />
+    </div>
+  </section>
+
+  <!-- ===================== SERVICE CARDS (spaces) ===================== -->
+  <section class="section service-cards" id="spaces">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">The spaces</p>
+        <h2>Three rooms, one lawn, any size.</h2>
+        <p>
+          A fireside toast for thirty or a tented dinner for a hundred and
+          twenty — and everything in between.
+        </p>
+      </div>
+      <div class="sc-grid three">
+        {
+          spaces.map((s) => (
+            <div class="sc-card">
+              <div class="sc-media">
+                <ImageSlot label={s.slot} />
+              </div>
+              <div class="sc-body">
+                <div class="sc-head">
+                  <h3>{s.name}</h3>
+                  <span class="sc-rate">
+                    {s.rate}
+                    <small>from</small>
+                  </span>
+                </div>
+                <p>{s.body}</p>
+                <a class="sc-link" href="#inquiry">
+                  Request a date →
+                </a>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROCESS STEPS ===================== -->
+  <section class="section process">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Start to finish</p>
+        <h2>How an event comes together.</h2>
+      </div>
+      <div class="steps">
+        {
+          steps.map((s) => (
+            <div class="step">
+              <div class="badge">{s.n}</div>
+              <h3>{s.title}</h3>
+              <p>{s.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== LIGHTBOX GALLERY ===================== -->
+  <section class="section gallery">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Days we've hosted</p>
+        <h2>A look at the good ones.</h2>
+        <p>Tap any photo to enlarge.</p>
+      </div>
+      <div class="gal-grid">
+        {
+          galleryItems.map((g) => (
+            <button
+              class={g.wide ? "gal-item wide" : "gal-item"}
+              data-gal-item
+              data-gal-ph={g.ph}
+              data-gal-cap={g.cap}
+            >
+              <ImageSlot label={g.slot} />
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT SPLIT (inquiry) ===================== -->
+  <section class="section contact-split" id="inquiry">
+    <div class="wrap">
+      <div class="section-head left">
+        <p class="eyebrow">Start the conversation</p>
+        <h2>Tell us about your day.</h2>
+        <p>
+          Send the basics and our events coordinator will reply within a day
+          with dates, pricing, and a time to come tour the house.
+        </p>
+      </div>
+      <div class="cs-grid">
+        <form class="res-form" data-visual>
+          <h3>Event inquiry</h3>
+          <div class="form-grid">
+            <div class="field">
+              <label for="e-name">Name <span class="req">*</span></label>
+              <input type="text" id="e-name" placeholder="Your name" />
+            </div>
+            <div class="field">
+              <label for="e-email">Email <span class="req">*</span></label>
+              <input type="email" id="e-email" placeholder="you@email.com" />
+            </div>
+            <div class="field">
+              <label for="e-phone">Phone</label>
+              <input type="tel" id="e-phone" placeholder="(000) 000-0000" />
+            </div>
+            <div class="field">
+              <label for="e-date">Preferred date</label>
+              <input type="text" id="e-date" placeholder="e.g. Sept 2026" />
+            </div>
+            <div class="field">
+              <label for="e-count">Guest count</label>
+              <input type="text" id="e-count" placeholder="Approx." />
+            </div>
+            <div class="field">
+              <label for="e-type">Type of event</label>
+              <select id="e-type">
+                <option>Wedding</option>
+                <option>Retreat</option>
+                <option>Private dinner</option>
+                <option>Other celebration</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="e-notes">Anything else?</label>
+              <textarea id="e-notes" placeholder="Tell us what you're picturing…"
+              ></textarea>
+            </div>
+          </div>
+          <button type="submit" class="btn">Request a date</button>
+          <p class="fineprint">We reply within one business day. No obligation.</p>
+        </form>
+        <div class="cs-info">
+          <h3>Events at the house</h3>
+          <p class="cs-lede">
+            Prefer to talk it through? Halli runs events and knows every date on
+            the calendar.
+          </p>
+          <div class="contact-row">
+            <div class="k">Events</div>
+            <div class="v">
+              <a href="mailto:events@harrowhouse.com">events@harrowhouse.com</a>
+            </div>
+          </div>
+          <div class="contact-row">
+            <div class="k">Phone</div>
+            <div class="v"><a href="tel:+12075550119">207-555-0119</a> ext. 3</div>
+          </div>
+          <div class="contact-row">
+            <div class="k">Address</div>
+            <div class="v">12 Bayview St<br />Camden, ME 04843</div>
+          </div>
+          <div class="contact-row">
+            <div class="k">Capacity</div>
+            <div class="v">Up to 120 on the lawn · 14 rooms for a full buyout</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== LIGHTBOX MODAL ===================== -->
+  <div
+    class="lightbox"
+    id="lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Photo viewer"
+  >
+    <button class="lb-close" aria-label="Close">×</button>
+    <button class="lb-btn lb-prev" aria-label="Previous">‹</button>
+    <div class="lb-stage">
+      <div class="img-slot">
+        <span class="slot-label" data-lb-label></span>
+      </div>
+      <div class="lb-cap" data-lb-cap></div>
+    </div>
+    <button class="lb-btn lb-next" aria-label="Next">›</button>
+  </div>
+</Layout>

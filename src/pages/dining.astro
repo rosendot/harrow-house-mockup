@@ -1,0 +1,152 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ImageSlot from "../components/ImageSlot.astro";
+import CrumbStrip from "../components/CrumbStrip.astro";
+import CtaBanner from "../components/CtaBanner.astro";
+
+const dinner = [
+  {
+    name: "Oysters on the half shell",
+    note: "From up the coast, shucked to order, mignonette",
+    price: "$19",
+  },
+  {
+    name: "Chowder",
+    note: "Whatever's freshest, cream, a little smoke",
+    price: "$14",
+  },
+  {
+    name: "Halibut with brown butter",
+    note: "Line-caught, capers, new potatoes",
+    price: "$38",
+  },
+  {
+    name: "Lobster tagliatelle",
+    note: "Hand-cut pasta, tarragon, a whole knuckle-and-claw's worth",
+    price: "$42",
+  },
+  {
+    name: "Roast chicken for two",
+    note: "Carved at the table, pan drippings, greens",
+    price: "$56",
+  },
+  { name: "Blueberry buckle", note: "Maine berries, warm, with cream", price: "$12" },
+  {
+    name: "Cheese plate",
+    note: "A few from Maine and Vermont, honey, walnuts",
+    price: "$18",
+  },
+];
+
+const breakfastTabs = [
+  { key: "all", label: "All" },
+  { key: "sweet", label: "Sweet" },
+  { key: "savory", label: "Savory" },
+  { key: "sides", label: "Sides" },
+];
+
+const breakfast = [
+  { name: "Blueberry pancakes", cat: "sweet", tag: "Sweet", price: "$16" },
+  { name: "Lobster benedict", cat: "savory", tag: "Savory", price: "$24" },
+  { name: "Soft eggs with toast", cat: "savory", tag: "Savory", price: "$14" },
+  { name: "Granola & yogurt", cat: "sweet", tag: "Sweet", price: "$11" },
+  { name: "Thick-cut bacon", cat: "sides", tag: "Side", price: "$7" },
+  { name: "Home fries", cat: "sides", tag: "Side", price: "$6" },
+];
+---
+
+<Layout title="Dining — The Harrow House, Camden Maine">
+  <CrumbStrip here="Dining" />
+
+  <!-- ===================== HERO SPLIT ===================== -->
+  <section class="hero-split">
+    <div class="hs2-body">
+      <p class="eyebrow">The restaurant</p>
+      <h1>Dinner on the porch, most of the year.</h1>
+      <p>
+        Sixteen seats, one seating a night, and a menu that depends on what the
+        boats brought in. We write it that afternoon and cook it that evening.
+      </p>
+      <p>
+        Breakfast is for house guests and comes with the room. Dinner is open to
+        anyone with a reservation — locals included, and there are usually a few.
+      </p>
+      <div class="cta-row">
+        <a class="btn" href="#dinner">See the menu</a>
+        <a class="btn ghost on-dark" href="/visit/">Find us</a>
+      </div>
+    </div>
+    <div class="hs2-media">
+      <ImageSlot label="The dining porch at golden hour — set tables, harbor light, candles" />
+    </div>
+  </section>
+
+  <!-- ===================== MENU LIST (dinner) ===================== -->
+  <section class="section menu-list-sec" id="dinner">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Dinner · one seating, 6:30</p>
+        <h2>Tonight's table.</h2>
+        <p>
+          A sample of how an evening runs. The board changes with the catch and
+          the season, so yours may read a little different.
+        </p>
+      </div>
+      <div class="ml-wrap">
+        {
+          dinner.map((d) => (
+            <div class="ml-row">
+              <div class="ml-info">
+                <div class="ml-name">{d.name}</div>
+                <div class="ml-note">{d.note}</div>
+              </div>
+              <div class="ml-dots" />
+              <div class="ml-price">{d.price}</div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MENU GRID (breakfast) ===================== -->
+  <section class="section menu-grid-sec" data-menu-grid>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Breakfast · till 10, included</p>
+        <h2>How the morning starts.</h2>
+      </div>
+      <div class="mg-tabs">
+        {
+          breakfastTabs.map((t) => (
+            <button
+              class={t.key === "all" ? "mg-tab active" : "mg-tab"}
+              data-cat={t.key}
+            >
+              {t.label}
+            </button>
+          ))
+        }
+      </div>
+      <div class="mg-grid">
+        {
+          breakfast.map((b) => (
+            <div class="mg-card" data-cat={b.cat}>
+              <div>
+                <h3>{b.name}</h3>
+                <span class="mg-cat-tag">{b.tag}</span>
+              </div>
+              <span class="mg-price">{b.price}</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBanner
+    title="Dinner seats 16. Reserve early."
+    cta="Reserve a table"
+    href="#dinner"
+  />
+</Layout>

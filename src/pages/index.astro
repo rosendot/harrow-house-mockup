@@ -1,0 +1,234 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ImageSlot from "../components/ImageSlot.astro";
+import CtaBanner from "../components/CtaBanner.astro";
+import { rooms } from "../data/rooms";
+
+const heroSlides = [
+  "The house from the harbor at dusk — lit windows, water in foreground",
+  "Guest room with a water view — white linens, window onto the harbor",
+  "The dining porch set for dinner, golden hour",
+  "The lawn set for an event — long table, string lights, harbor beyond",
+];
+
+const pillars = [
+  {
+    num: "i",
+    title: "Every room sees water or garden",
+    body: "No interior rooms, ever. You wake up to the harbor or the garden — never a parking lot or an air shaft.",
+  },
+  {
+    num: "ii",
+    title: "Breakfast is included, and it's good",
+    body: "Made in-house and served till 10, so there's no rush. Blueberry pancakes, lobster benedict, coffee that keeps coming.",
+  },
+  {
+    num: "iii",
+    title: "Walk to the harbor in four minutes",
+    body: "The schooners, the shops, and the Mount Battie trailhead are all a short stroll down Bayview Street.",
+  },
+];
+
+const gallery = [
+  {
+    cls: "tall",
+    slot: "Exterior: the 1890s captain's house, white clapboard, widow's walk",
+    cap: "The house on Bayview Street",
+  },
+  {
+    cls: "",
+    slot: "The parlor: fireplace, piano, soft afternoon light",
+    cap: "The parlor, before dinner",
+  },
+  {
+    cls: "",
+    slot: "A guest room: white linens, harbor window",
+    cap: "King Harbor, morning",
+  },
+  {
+    cls: "wide",
+    slot: "The porch: rocking chairs, harbor view, coffee",
+    cap: "The porch at 7am",
+  },
+  {
+    cls: "",
+    slot: "The garden: perennial beds, path, bench",
+    cap: "The garden in June",
+  },
+  {
+    cls: "",
+    slot: "The boathouse on the water, set for dinner",
+    cap: "The boathouse",
+  },
+];
+
+const testimonials = [
+  {
+    quote: "We came for a weekend and rebooked before we left.",
+    name: "Dana & Rob F.",
+    where: "Boston",
+  },
+  {
+    quote: "The porch at 7am with coffee is the whole reason to come.",
+    name: "Marguerite L.",
+    where: "Portland",
+  },
+  {
+    quote: "They remembered our anniversary without being asked.",
+    name: "Tom H.",
+    where: "New York",
+  },
+];
+---
+
+<Layout title="The Harrow House — A Boutique Inn on Camden Harbor, Maine">
+  <!-- ===================== HERO SLIDESHOW ===================== -->
+  <section class="hero-slideshow" data-slideshow>
+    <div class="hs-slides">
+      {
+        heroSlides.map((s, i) => (
+          <div class={i === 0 ? "hs-slide active" : "hs-slide"}>
+            <ImageSlot label={s} />
+          </div>
+        ))
+      }
+    </div>
+    <div class="hs-scrim"></div>
+    <div class="hs-body">
+      <p class="eyebrow">Camden, Maine</p>
+      <h1>A harbor, a porch, and nowhere to be.</h1>
+      <p class="subhead">
+        Fourteen rooms in a restored 1890s captain's house — two minutes from
+        the schooners, a world away from the week you just had.
+      </p>
+      <div class="cta-row">
+        <a class="btn" href="/rooms/">Book a Room</a>
+        <a class="btn ghost on-dark" href="/rooms/">See the rooms</a>
+      </div>
+    </div>
+    <div class="hs-dots">
+      {
+        heroSlides.map((_, i) => (
+          <button
+            class={i === 0 ? "hs-dot active" : "hs-dot"}
+            aria-label={`Slide ${i + 1}`}
+          />
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ===================== FEATURE GRID ===================== -->
+  <section class="section features">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Why guests come back</p>
+        <h2>Small house, few rules, good mornings.</h2>
+      </div>
+      <div class="feature-grid">
+        {
+          pillars.map((p) => (
+            <div class="pillar">
+              <div class="num">{p.num}</div>
+              <div class="rule" />
+              <h3>{p.title}</h3>
+              <p>{p.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== GRID GALLERY ===================== -->
+  <section class="section grid-gallery">
+    <div class="wrap-wide">
+      <div class="section-head">
+        <p class="eyebrow">A look around</p>
+        <h2>The house, room by room.</h2>
+      </div>
+      <div class="gg-grid">
+        {
+          gallery.map((g) => (
+            <div class={g.cls ? `gg-item ${g.cls}` : "gg-item"}>
+              <ImageSlot label={g.slot} />
+              <div class="gg-cap">{g.cap}</div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SERVICE CARDS (rooms) ===================== -->
+  <section class="section service-cards">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">The rooms</p>
+        <h2>Fourteen rooms, four ways to stay.</h2>
+        <p>
+          Harbor-facing or garden-quiet, a king with a clawfoot tub or two twins
+          for friends — all with breakfast in the morning.
+        </p>
+      </div>
+      <div class="sc-grid">
+        {
+          rooms.map((r) => (
+            <div class="sc-card">
+              <div class="sc-media">
+                <ImageSlot label={r.slotHome} />
+              </div>
+              <div class="sc-body">
+                <div class="sc-head">
+                  <h3>{r.name}</h3>
+                  <span class="sc-rate">
+                    {r.rate}
+                    <small>from / night</small>
+                  </span>
+                </div>
+                <p>{r.cardBlurb}</p>
+                <a class="sc-link" href="/rooms/">
+                  Check availability →
+                </a>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TESTIMONIAL SLIDER ===================== -->
+  <section class="section testimonial" data-testimonial>
+    <div class="ts-wrap">
+      <div class="ts-quotemark">”</div>
+      <div class="ts-track">
+        {
+          testimonials.map((t, i) => (
+            <div class={i === 0 ? "ts-slide active" : "ts-slide"}>
+              <blockquote>{t.quote}</blockquote>
+              <div class="ts-who">
+                <b>{t.name}</b> <span>· {t.where}</span>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <div class="ts-dots">
+        {
+          testimonials.map((_, i) => (
+            <button
+              class={i === 0 ? "ts-dot active" : "ts-dot"}
+              aria-label={`Testimonial ${i + 1}`}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBanner
+    title="Harbor rooms go first in summer."
+    cta="Check availability"
+  />
+</Layout>

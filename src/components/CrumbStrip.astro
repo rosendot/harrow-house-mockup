@@ -1,0 +1,16 @@
+---
+/** Thin white breadcrumb bar. Used on the two pages that open with a split
+ *  hero (Dining, Events) instead of the dark CrumbBar. */
+interface Props {
+  here: string;
+}
+const { here } = Astro.props;
+---
+
+<div class="crumb-strip">
+  <nav class="crumbs wrap" aria-label="Breadcrumb">
+    <a href="/">Home</a>
+    <span class="sep">/</span>
+    <span class="here">{here}</span>
+  </nav>
+</div>

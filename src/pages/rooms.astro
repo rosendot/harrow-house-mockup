@@ -1,0 +1,182 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ImageSlot from "../components/ImageSlot.astro";
+import CrumbBar from "../components/CrumbBar.astro";
+import CtaBanner from "../components/CtaBanner.astro";
+import { rooms } from "../data/rooms";
+
+const faqs = [
+  {
+    q: "What time is check-in?",
+    a: "Check-in is from 3pm and check-out is 11am. Getting in early or leaving late? Just ask — if the room's ready we'll hand you the key, and we're always happy to stash your bags on the porch either way.",
+    open: true,
+  },
+  {
+    q: "Is breakfast really included?",
+    a: "Yes, every room, every morning, made in-house and served till 10. Blueberry pancakes, lobster benedict, soft eggs, granola — plus coffee that keeps coming. No vouchers, no upcharge.",
+  },
+  {
+    q: "Do you allow pets?",
+    a: "Well-behaved dogs are welcome in the Captain's Suite, which opens to the garden. There's a $40/night fee and a bowl and towels waiting. The other rooms are pet-free for guests with allergies.",
+  },
+  {
+    q: "Is there parking?",
+    a: "Free on-site parking for every room, right behind the house — a rare thing in Camden in July. Leave the car and walk everywhere; the harbor is four minutes down Bayview.",
+  },
+  {
+    q: "What's your cancellation policy?",
+    a: "Cancel up to 7 days before arrival for a full refund. Inside 7 days we'll refund whatever we're able to rebook. Buyout and event bookings have their own terms — we'll walk you through them.",
+  },
+  {
+    q: "Are children welcome?",
+    a: "Children over 8 are welcome, and the Twin Garden is a good fit for a family. We're a small, quiet house, so we don't have cribs or connecting rooms — happy to point you to places nearby that do.",
+  },
+];
+
+const compareRows = [
+  { label: "Bed", key: "bed" as const },
+  { label: "View", key: "view" as const },
+  { label: "Square feet", key: "sqft" as const },
+  { label: "Bath", key: "bath" as const },
+  { label: "Sleeps", key: "sleeps" as const },
+];
+---
+
+<Layout title="Rooms — The Harrow House, Camden Maine">
+  <CrumbBar
+    here="Rooms"
+    eyebrow="The rooms"
+    title="Fourteen rooms. Not one of them faces a wall."
+    lede="Harbor or garden, king or twins, tub or shower — pick the one that fits the trip. Breakfast comes with every one of them."
+  />
+
+  <!-- ===================== FEATURE ALTERNATING ===================== -->
+  <section class="section feature-alt">
+    <div class="wrap">
+      <div class="fa-rows">
+        {
+          rooms.map((r, i) => (
+            <div class={i % 2 === 1 ? "fa-row flip" : "fa-row"}>
+              <div class="fa-media">
+                <ImageSlot label={r.slotRooms} />
+              </div>
+              <div class="fa-body">
+                <p class="eyebrow">{r.side}</p>
+                <p class="fa-rate">
+                  {r.rate} <small>/ night</small>
+                </p>
+                <h3>{r.name}</h3>
+                <p>{r.blurb}</p>
+                <ul class="fa-tags">
+                  {r.tags.map((t) => (
+                    <li>{t}</li>
+                  ))}
+                </ul>
+                <a class="fa-link" href="/rooms/">
+                  Check availability →
+                </a>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PRICING TABLE ===================== -->
+  <section class="section pricing">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Side by side</p>
+        <h2>Compare the rooms.</h2>
+      </div>
+      <div class="pt-scroll">
+        <table class="pt-table">
+          <thead>
+            <tr>
+              <th></th>
+              {
+                rooms.map((r) => (
+                  <th>
+                    <div class="rm-name">{r.name}</div>
+                    <div class="rm-rate">from {r.rate}</div>
+                  </th>
+                ))
+              }
+            </tr>
+          </thead>
+          <tbody>
+            {
+              compareRows.map((row) => (
+                <tr>
+                  <th>{row.label}</th>
+                  {rooms.map((r) => (
+                    <td>{r[row.key]}</td>
+                  ))}
+                </tr>
+              ))
+            }
+            <tr>
+              <th>Breakfast included</th>
+              {rooms.map(() => <td><span class="pt-check">✓</span></td>)}
+            </tr>
+            <tr>
+              <th>Pets allowed</th>
+              {
+                rooms.map((r) => (
+                  <td>
+                    {r.pets ? (
+                      <span class="pt-check">✓</span>
+                    ) : (
+                      <span class="pt-x">—</span>
+                    )}
+                  </td>
+                ))
+              }
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td></td>
+              {
+                rooms.map(() => (
+                  <td>
+                    <a class="btn ghost" href="/rooms/">
+                      Book
+                    </a>
+                  </td>
+                ))
+              }
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FAQ ACCORDION ===================== -->
+  <section class="section faq" data-faq>
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Before you book</p>
+        <h2>The questions we get asked.</h2>
+      </div>
+      <div class="faq-list">
+        {
+          faqs.map((f) => (
+            <div class={f.open ? "faq-item open" : "faq-item"}>
+              <button class="faq-q">
+                {f.q} <span class="ic" />
+              </button>
+              <div class="faq-a">
+                <p>{f.a}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBanner title="Pick your room and we'll hold it." />
+</Layout>
