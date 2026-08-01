@@ -10,24 +10,32 @@ const team = [
     role: "Innkeeper",
     bio: "Runs the front of the house and remembers everything — your name, your anniversary, that you like the corner table.",
     slot: "Nora — innkeeper, portrait",
+    src: "/photos/team-nora.webp",
+    alt: "Nora, innkeeper, in an apron by a white wall",
   },
   {
     name: "Peter",
     role: "Innkeeper & Cook",
     bio: "In the kitchen before dawn. Writes the dinner menu around whatever the boats brought in that afternoon.",
     slot: "Peter — innkeeper & cook, portrait",
+    src: "/photos/team-peter.webp",
+    alt: "Peter, innkeeper and cook, arms folded in the kitchen",
   },
   {
     name: "Halli",
     role: "Head of House",
     bio: "Keeps fourteen rooms turning without you ever noticing. Also runs every wedding and retreat on the calendar.",
     slot: "Halli — head of house, portrait",
+    src: "/photos/team-halli.webp",
+    alt: "Halli, head of house, standing in a bright doorway",
   },
   {
     name: "Owen",
     role: "Breakfast & Dinner Service",
     bio: "The one pouring your coffee at 7 and your wine at 7. Knows the tide chart and which trail to send you up.",
     slot: "Owen — breakfast & dinner service, portrait",
+    src: "/photos/team-owen.webp",
+    alt: "Owen, who runs breakfast and dinner service, in an apron",
   },
 ];
 
@@ -43,14 +51,28 @@ const stats = [
 const seasons = [
   {
     slot: "Summer porch: rocking chairs, flowers, bright harbor",
+    src: "/photos/season-summer.webp",
+    alt: "The porch in summer — white rockers and flowering pots",
     cap: "Summer on the porch",
   },
-  { slot: "Autumn foliage around the house, warm colors", cap: "Autumn foliage" },
+  {
+    slot: "Autumn foliage around the house, warm colors",
+    src: "/photos/season-autumn.webp",
+    alt: "The house framed by a maple in full autumn colour",
+    cap: "Autumn foliage",
+  },
   {
     slot: "Winter snow on the widow's walk, quiet, blue light",
+    src: "/photos/season-winter.webp",
+    alt: "Snow over the roofline of the house in flat winter light",
     cap: "Snow on the widow's walk",
   },
-  { slot: "Spring garden in bloom, path, green", cap: "The garden in spring" },
+  {
+    slot: "Spring garden in bloom, path, green",
+    src: "/photos/season-spring.webp",
+    alt: "The garden path in spring, beds green and coming into flower",
+    cap: "The garden in spring",
+  },
 ];
 ---
 
@@ -67,7 +89,10 @@ const seasons = [
     <div class="wrap">
       <div class="spotlight-grid">
         <div class="spotlight-media">
-          <ImageSlot label="Nora and Peter on the porch, warm and candid" />
+          <ImageSlot
+            src="/photos/inn-nora-peter.webp"
+            alt="The porch of the inn, rocking chairs waiting in the afternoon light"
+          />
           <span class="badge">Nora &amp; Peter, Innkeepers</span>
         </div>
         <div class="spotlight-body">
@@ -107,7 +132,7 @@ const seasons = [
         {
           team.map((m) => (
             <div class="to-card">
-              <ImageSlot label={m.slot} />
+              <ImageSlot label={m.slot} src={m.src} alt={m.alt} />
               <div class="to-info">
                 <h3>{m.name}</h3>
                 <p class="role">{m.role}</p>
@@ -147,7 +172,7 @@ const seasons = [
         {
           [...seasons, ...seasons].map((s) => (
             <div class="ic-item">
-              <ImageSlot label={s.slot} />
+              <ImageSlot label={s.slot} src={s.src} alt={s.alt} />
               <div class="ic-cap">{s.cap}</div>
             </div>
           ))

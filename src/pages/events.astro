@@ -8,18 +8,24 @@ const spaces = [
     name: "The Parlor",
     rate: "$1,200",
     slot: "The Parlor: fireplace, piano, intimate dinner setting",
+    src: "/photos/ev-parlor.webp",
+    alt: "The parlor set for an intimate dinner, fireplace at one end",
     body: "Seats 30 by the fireplace, with a piano in the corner. The room for a rehearsal dinner, a milestone birthday, or a toast that runs long.",
   },
   {
     name: "The Boathouse",
     rate: "$2,400",
     slot: "The Boathouse set for dinner, right on the water, open doors",
+    src: "/photos/ev-boathouse.webp",
+    alt: "The boathouse on the water with its doors open to the harbor",
     body: "Seats 60 right on the water, doors open to the harbor. Our favorite for a dinner that starts at golden hour and ends under the stars.",
   },
   {
     name: "The Lawn",
     rate: "$3,800",
     slot: "The Lawn under a tent, set for a wedding of 120, harbor view",
+    src: "/photos/ev-lawn-tent.webp",
+    alt: "A white pole tent pitched on the lawn, open on all sides",
     body: "Seats 120 under the tent, the harbor as your backdrop. The full wedding: ceremony by the water, dinner on the grass, dancing after.",
   },
 ];
@@ -53,19 +59,27 @@ const galleryItems = [
     ph: "Lawn wedding: ceremony by the water, guests seated, harbor",
     cap: "A June wedding on the lawn.",
     slot: "Lawn wedding by the water",
+    src: "/photos/ev-gal-wedding.webp",
+    alt: "Rows of chairs and florals set for a ceremony on the grass",
   },
   {
     ph: "The boathouse set for dinner, candles, open to the water",
     cap: "The boathouse, set for sixty.",
     slot: "Boathouse dinner setting",
+    src: "/photos/ev-gal-boathouse-dinner.webp",
+    alt: "A long table laid the length of the room for a seated dinner",
   },
   {
     ph: "The parlor mid-toast, guests raising glasses, fireplace",
     cap: "A toast in the parlor.",
     slot: "Parlor mid-toast",
+    src: "/photos/ev-gal-parlor-toast.webp",
+    alt: "The parlor in lamplight, chairs drawn together mid-evening",
   },
   {
     ph: "String lights at dusk over the lawn tables",
+    src: "/photos/ev-gal-string-lights.webp",
+    alt: "Bulb lights strung above tables just after sunset",
     cap: "String lights, just after sunset.",
     slot: "String lights at dusk",
   },
@@ -73,14 +87,20 @@ const galleryItems = [
     ph: "Retreat circle of chairs on the lawn, morning",
     cap: "A morning retreat circle.",
     slot: "Retreat circle on the lawn",
+    src: "/photos/ev-gal-retreat.webp",
+    alt: "Chairs set in a circle on the grass among the garden beds",
   },
   {
     ph: "Close-up tablescape: linen, flowers, place settings",
     cap: "The details, up close.",
     slot: "Tablescape close-up",
+    src: "/photos/ev-gal-tablescape.webp",
+    alt: "A close view of the table — linen, glassware and low florals",
   },
   {
     ph: "First dance under the tent, guests around",
+    src: "/photos/ev-gal-first-dance.webp",
+    alt: "The open floor under the tent, tables cleared to the edges",
     cap: "First dance under the tent.",
     slot: "First dance under the tent",
   },
@@ -88,15 +108,21 @@ const galleryItems = [
     ph: "Guests gathered on the porch with drinks, afternoon",
     cap: "Cocktails on the porch.",
     slot: "Guests on the porch",
+    src: "/photos/ev-gal-guests-porch.webp",
+    alt: "The porch of the house looking out across the lawn to the water",
   },
   {
     wide: true,
     ph: "Wide shot of the full tented lawn at night, lit, harbor",
     cap: "The lawn at full tilt.",
     slot: "Full tented lawn at night",
+    src: "/photos/ev-gal-tented-night.webp",
+    alt: "The tent lit from within, long tables running its length",
   },
   {
     ph: "Sparkler send-off at the front of the house at night",
+    src: "/photos/ev-gal-sparklers.webp",
+    alt: "The tent at the end of the night, lights low over empty chairs",
     cap: "The send-off.",
     slot: "Sparkler send-off",
   },
@@ -126,7 +152,10 @@ const galleryItems = [
       </div>
     </div>
     <div class="hs2-media">
-      <ImageSlot label="The lawn set for a dinner — long table, string lights, harbor beyond, dusk" />
+      <ImageSlot
+        src="/photos/ev-hero.webp"
+        alt="A long table on the lawn under string lights, the water beyond at dusk"
+      />
     </div>
   </section>
 
@@ -146,7 +175,7 @@ const galleryItems = [
           spaces.map((s) => (
             <div class="sc-card">
               <div class="sc-media">
-                <ImageSlot label={s.slot} />
+                <ImageSlot label={s.slot} src={s.src} alt={s.alt} />
               </div>
               <div class="sc-body">
                 <div class="sc-head">
@@ -205,8 +234,10 @@ const galleryItems = [
               data-gal-item
               data-gal-ph={g.ph}
               data-gal-cap={g.cap}
+              data-gal-src={g.src}
+              data-gal-alt={g.alt}
             >
-              <ImageSlot label={g.slot} />
+              <ImageSlot label={g.slot} src={g.src} alt={g.alt} />
             </button>
           ))
         }
@@ -307,8 +338,8 @@ const galleryItems = [
     <button class="lb-close" aria-label="Close">×</button>
     <button class="lb-btn lb-prev" aria-label="Previous">‹</button>
     <div class="lb-stage">
-      <div class="img-slot">
-        <span class="slot-label" data-lb-label></span>
+      <div class="img-slot has-image">
+        <img data-lb-img src="" alt="" />
       </div>
       <div class="lb-cap" data-lb-cap></div>
     </div>

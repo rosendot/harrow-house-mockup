@@ -183,16 +183,19 @@ const {
   const lb = document.getElementById("lightbox");
   const galItems = Array.from(document.querySelectorAll<HTMLElement>("[data-gal-item]"));
   if (lb && galItems.length) {
-    const lbLabel = lb.querySelector<HTMLElement>("[data-lb-label]");
+    const lbImg = lb.querySelector<HTMLImageElement>("[data-lb-img]");
     const lbCap = lb.querySelector<HTMLElement>("[data-lb-cap]");
     let current = 0;
 
     const open = (i: number) => {
       current = (i + galItems.length) % galItems.length;
       const item = galItems[current];
-      // With no real photos yet the viewer shows the slot caption; swap this
-      // for an <img src> once photos land.
-      if (lbLabel) lbLabel.textContent = item.getAttribute("data-gal-ph") ?? "";
+      // Each thumbnail carries its own src/alt, so the viewer shows the full
+      // photo for whichever tile was tapped.
+      if (lbImg) {
+        lbImg.src = item.getAttribute("data-gal-src") ?? "";
+        lbImg.alt = item.getAttribute("data-gal-alt") ?? "";
+      }
       if (lbCap) lbCap.textContent = item.getAttribute("data-gal-cap") ?? "";
       lb.classList.add("open");
       document.body.style.overflow = "hidden";

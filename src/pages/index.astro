@@ -5,10 +5,22 @@ import CtaBanner from "../components/CtaBanner.astro";
 import { rooms } from "../data/rooms";
 
 const heroSlides = [
-  "The house from the harbor at dusk — lit windows, water in foreground",
-  "Guest room with a water view — white linens, window onto the harbor",
-  "The dining porch set for dinner, golden hour",
-  "The lawn set for an event — long table, string lights, harbor beyond",
+  {
+    src: "/photos/hero-house-dusk.webp",
+    alt: "The white clapboard house behind its picket fence, windows lit at dusk",
+  },
+  {
+    src: "/photos/hero-guest-room.webp",
+    alt: "A guest room with white linens and windows onto the harbor",
+  },
+  {
+    src: "/photos/hero-dining-porch.webp",
+    alt: "The dining porch set for dinner in golden-hour light",
+  },
+  {
+    src: "/photos/hero-lawn-event.webp",
+    alt: "Long tables on the lawn under string lights, the harbor beyond",
+  },
 ];
 
 const pillars = [
@@ -30,31 +42,43 @@ const gallery = [
   {
     cls: "tall",
     slot: "Exterior: the 1890s captain's house, white clapboard, widow's walk",
+    src: "/photos/gal-exterior.webp",
+    alt: "The white clapboard house with black shutters behind autumn trees",
     cap: "The house on Bayview Street",
   },
   {
     cls: "",
     slot: "The parlor: fireplace, piano, soft afternoon light",
+    src: "/photos/gal-parlor.webp",
+    alt: "The parlor — a lit fireplace with an upright piano beside it",
     cap: "The parlor, before dinner",
   },
   {
     cls: "",
     slot: "A guest room: white linens, harbor window",
+    src: "/photos/gal-guest-room.webp",
+    alt: "A guest room with a wooden bed and windows on two walls",
     cap: "King Harbor, morning",
   },
   {
     cls: "wide",
     slot: "The porch: rocking chairs, harbor view, coffee",
+    src: "/photos/gal-porch.webp",
+    alt: "White rocking chairs along a porch lined with flowers",
     cap: "The porch at 7am",
   },
   {
     cls: "",
     slot: "The garden: perennial beds, path, bench",
+    src: "/photos/gal-garden.webp",
+    alt: "A path winding between perennial beds in full bloom",
     cap: "The garden in June",
   },
   {
     cls: "",
     slot: "The boathouse on the water, set for dinner",
+    src: "/photos/gal-boathouse.webp",
+    alt: "A white clapboard boathouse standing on pilings over the water",
     cap: "The boathouse",
   },
 ];
@@ -85,7 +109,7 @@ const testimonials = [
       {
         heroSlides.map((s, i) => (
           <div class={i === 0 ? "hs-slide active" : "hs-slide"}>
-            <ImageSlot label={s} />
+            <ImageSlot src={s.src} alt={s.alt} />
           </div>
         ))
       }
@@ -147,7 +171,7 @@ const testimonials = [
         {
           gallery.map((g) => (
             <div class={g.cls ? `gg-item ${g.cls}` : "gg-item"}>
-              <ImageSlot label={g.slot} />
+              <ImageSlot label={g.slot} src={g.src} alt={g.alt} />
               <div class="gg-cap">{g.cap}</div>
             </div>
           ))
@@ -172,7 +196,7 @@ const testimonials = [
           rooms.map((r) => (
             <div class="sc-card">
               <div class="sc-media">
-                <ImageSlot label={r.slotHome} />
+                <ImageSlot label={r.slotHome} src={r.src} alt={r.alt} />
               </div>
               <div class="sc-body">
                 <div class="sc-head">

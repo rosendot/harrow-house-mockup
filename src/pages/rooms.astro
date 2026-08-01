@@ -58,7 +58,7 @@ const compareRows = [
           rooms.map((r, i) => (
             <div class={i % 2 === 1 ? "fa-row flip" : "fa-row"}>
               <div class="fa-media">
-                <ImageSlot label={r.slotRooms} />
+                <ImageSlot label={r.slotRooms} src={r.src} alt={r.alt} />
               </div>
               <div class="fa-body">
                 <p class="eyebrow">{r.side}</p>
