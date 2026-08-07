@@ -66,24 +66,103 @@ const {
   const scrim = document.getElementById("drawerScrim");
   const drawerClose = document.getElementById("drawerClose");
 
+  // Scroll lock. `overflow: hidden` on <body> is not enough: the scroll lives
+  // on the document, so hiding the overflow reflows the page and *drops* the
+  // offset — opening the drawer partway down the page and closing it landed
+  // the reader somewhere else. Pinning the body holds the position exactly,
+  // and it is also the only variant iOS Safari honours.
+  let lockedY = 0;
+  const lockScroll = () => {
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${lockedY}px`;
+    document.body.style.left = "0";
+    document.body.style.right = "0";
+    document.body.style.overflow = "hidden";
+  };
+  const unlockScroll = () => {
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.left = "";
+    document.body.style.right = "";
+    document.body.style.overflow = "";
+    // behavior: "instant" is required. `html { scroll-behavior: smooth }`
+    // otherwise turns this restore into an animated scroll from 0 — the
+    // reader watches the whole page fly past on the way back to where they
+    // already were, and anything reading the position mid-flight sees a
+    // number that is simply wrong. Smooth is for anchor jumps, not for
+    // putting someone back where they started.
+    window.scrollTo({ top: lockedY, left: 0, behavior: "instant" });
+  };
+
+  const drawerFocusables = () =>
+    Array.from(
+      drawer?.querySelectorAll<HTMLElement>("a[href], button:not([disabled])") ?? [],
+    ).filter((el) => el.offsetParent !== null);
+
+  const isDrawerOpen = () => drawer?.classList.contains("open") ?? false;
+
   const openDrawer = () => {
+    // Read the scroll offset before any DOM mutation — adding .open reflows
+    // the page and can reset scrollY before we have recorded it.
+    lockedY = window.scrollY;
     drawer?.classList.add("open");
     scrim?.classList.add("open");
     navToggle?.setAttribute("aria-expanded", "true");
-    document.body.style.overflow = "hidden";
+    navToggle?.setAttribute("aria-label", "Close menu");
+    lockScroll();
+    // preventScroll: focusing inside the fixed panel otherwise nudges the
+    // pinned body and the restore lands a few pixels off.
+    drawerClose?.focus({ preventScroll: true });
+    document.addEventListener("keydown", onDrawerKeydown);
   };
-  const closeDrawer = () => {
+  const closeDrawer = (restoreFocus = true) => {
     drawer?.classList.remove("open");
     scrim?.classList.remove("open");
     navToggle?.setAttribute("aria-expanded", "false");
-    document.body.style.overflow = "";
+    navToggle?.setAttribute("aria-label", "Open menu");
+    unlockScroll();
+    document.removeEventListener("keydown", onDrawerKeydown);
+    if (restoreFocus) navToggle?.focus({ preventScroll: true });
   };
 
-  navToggle?.addEventListener("click", openDrawer);
-  scrim?.addEventListener("click", closeDrawer);
-  drawerClose?.addEventListener("click", closeDrawer);
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && drawer?.classList.contains("open")) closeDrawer();
+  function onDrawerKeydown(e: KeyboardEvent) {
+    if (e.key === "Escape") {
+      e.preventDefault();
+      closeDrawer();
+      return;
+    }
+    // Trap Tab inside the drawer. Untrapped, the first Tab leaves the panel
+    // and lands on the hero buttons underneath it — a keyboard user driving
+    // content they cannot see.
+    if (e.key === "Tab") {
+      const items = drawerFocusables();
+      if (!items.length) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
+
+  navToggle?.addEventListener("click", () =>
+    isDrawerOpen() ? closeDrawer() : openDrawer(),
+  );
+  scrim?.addEventListener("click", () => closeDrawer());
+  drawerClose?.addEventListener("click", () => closeDrawer());
+  // Close on link tap. Every link is a real navigation, so don't steal focus
+  // back to the burger on the way out.
+  drawer?.addEventListener("click", (e) => {
+    if ((e.target as HTMLElement).closest("a[href]")) closeDrawer(false);
+  });
+  // Reset if the viewport grows past the drawer breakpoint while it's open,
+  // or the body stays locked with no visible menu to unlock it.
+  window.matchMedia("(min-width: 861px)").addEventListener("change", (e) => {
+    if (e.matches && isDrawerOpen()) closeDrawer(false);
   });
 
   document.querySelectorAll<HTMLElement>(".drawer-toggle").forEach((t) => {
@@ -210,12 +289,18 @@ const {
         lbImg.alt = item.getAttribute("data-gal-alt") ?? "";
       }
       if (lbCap) lbCap.textContent = item.getAttribute("data-gal-cap") ?? "";
-      lb.classList.add("open");
-      document.body.style.overflow = "hidden";
+      // Same pinned lock as the drawer — plain `overflow: hidden` drops the
+      // scroll offset, so closing the lightbox returned the reader to a
+      // different part of the gallery than the tile they opened.
+      if (!lb.classList.contains("open")) {
+        lockedY = window.scrollY;
+        lb.classList.add("open");
+        lockScroll();
+      }
     };
     const close = () => {
       lb.classList.remove("open");
-      document.body.style.overflow = "";
+      unlockScroll();
     };
 
     galItems.forEach((item, i) => item.addEventListener("click", () => open(i)));

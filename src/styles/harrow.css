@@ -28,7 +28,9 @@
   --header-h: 76px;
 }
 
-html { scroll-behavior: smooth; }
+/* scroll-padding-top keeps an in-page anchor jump from parking its target
+   under the sticky bar. */
+html { scroll-behavior: smooth; scroll-padding-top: var(--header-h); }
 body {
   margin: 0;
   font-family: var(--font-body);
@@ -539,12 +541,37 @@ a { color: inherit; }
 .foot-concept a { color: rgba(255,255,255,.62); text-decoration: underline; text-underline-offset: 2px; }
 .foot-concept a:hover { color: var(--color-white); }
 
-/* ===== RESPONSIVE ===== */
+/* ===== RESPONSIVE =====
+   Three blocks, ordered widest → narrowest so a narrower query wins at equal
+   specificity. 980 = layout grids, 860 = header/drawer (already correct —
+   the mega-nav genuinely runs out of room there), 720 = phone layout. */
 @media (max-width: 980px) {
-  .feature-grid, .sc-grid, .sc-grid.three, .to-grid, .loc-grid, .steps, .gg-grid { grid-template-columns: repeat(2, 1fr); }
+  .feature-grid, .sc-grid, .sc-grid.three, .to-grid, .loc-grid, .steps, .gg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .steps::before { display: none; }
-  .fa-row, .cs-grid, .mapembed-grid, .hero-split, .spotlight-grid { grid-template-columns: 1fr; }
-  .fa-row.flip .fa-media { order: 0; }
+  /* minmax(0, 1fr), not a bare 1fr. A bare `1fr` is minmax(auto, 1fr) and
+     that `auto` is the item's *min-content* width — which is how .cs-grid
+     floored /events/ at 331px and .mapembed-grid floored /visit/ at 397px,
+     forcing the browser to zoom the whole page out. No overflow check fires
+     on that: the page is scaled, not scrolled. */
+  .cs-grid, .mapembed-grid, .hero-split, .spotlight-grid { grid-template-columns: minmax(0, 1fr); }
+
+  /* .fa-row deliberately does NOT stack here — it keeps two columns through
+     tablet and stacks at the phone breakpoint only. Stacked at 980 a
+     full-width 4:3 photo becomes 663px tall and the body copy runs to 111
+     characters per line, making the tablet case (4341px) far worse than the
+     phone's (2743px). Two-up: 1610px, and 38–54 CPL across 721–980, which is
+     a comfortable measure. The .flip reset moves down with the stack. */
+  .fa-row { grid-template-columns: 1fr 1fr; gap: var(--space-6); }
+
+  /* The other half of those floors: an email address is one unbreakable
+     token — stay@harrowhouse.com is 162px and events@harrowhouse.com 179px,
+     each sitting in a .contact-row whose .k label already claims 92px. */
+  .contact-row .v, .contact-card .v, .cs-info p, .foot-info { overflow-wrap: anywhere; }
+
+  /* iOS Safari zooms the page when a field under 16px takes focus, and
+     --text-base is 0.95rem = 15.2px. This belongs at 980, not 860 — an iPad
+     is a touch device and zooms identically. */
+  .field input, .field select, .field textarea { font-size: 16px; }
   .spotlight-media { aspect-ratio: 16/10; }
   .stat-grid { grid-template-columns: repeat(2, 1fr); gap: var(--space-10); }
   .stat:nth-child(2)::after { display: none; }
@@ -553,24 +580,188 @@ a { color: inherit; }
   .gg-grid { grid-auto-rows: 190px; }
 }
 @media (max-width: 860px) {
+  /* The drawer breakpoint was already right — five mega items plus the CTA
+     genuinely run out of room here, and because .site-header is sticky that
+     would have been a real horizontal scrollbar rather than silent clipping.
+     Verified by measuring the brand/nav gap rather than summing widths. */
   .mega-nav, .header-cta .btn { display: none; }
-  .nav-toggle { display: block; }
+  /* 40x42 fails WCAG 2.5.8 on both axes. Pad the button, leave the 24px
+     bars alone. */
+  .nav-toggle { display: block; padding: 10px; width: 44px; height: 44px; }
+  .header-bar { padding-right: var(--space-4); }
+
+  /* --- Touch targets belong at the DRAWER breakpoint, not the phone one.
+     Below 861px this is a touch device by the site's own reckoning — that is
+     why the burger appears — so a 19px link fails here just as it does at
+     390. Scoping these to 720 left the whole 721–860 band failing, which is
+     exactly the tablet range the guide warns about. --- */
+  .site-header .brand, .site-footer .brand { min-height: 44px; align-items: center; }
+  .foot-social a { width: 44px; height: 44px; }
+  /* Card-footer links are standalone controls, not inline links in a
+     sentence, so WCAG's inline-prose exemption does not apply. Pad
+     vertically and pull the margin back so the card does not grow. */
+  .sc-link, .fa-link { padding: 13px 0; margin: -13px 0; }
+  .contact-row .v a, .foot-info a { display: inline-block; padding: 11px 0; }
+  /* Short crumb labels ("Home") fail on *width* once the height is fixed. */
+  .crumbs a, .crumbs .here { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; }
+  .crumbs { gap: var(--space-2); margin-bottom: var(--space-3); }
+  .btn { padding-top: var(--space-3); padding-bottom: var(--space-3); min-height: 44px; }
+  .mg-tab { min-height: 44px; min-width: 44px; }
+  .drawer-close { width: 44px; height: 44px; }
+  /* Slider dots read correctly at 10px; it is the hit area that is short.
+     background-clip: content-box keeps the padding transparent so the fill
+     still paints at the designed size. */
+  .hs-dot, .ts-dot {
+    width: 10px; height: 10px; padding: 17px;
+    background-clip: content-box; box-sizing: content-box;
+  }
+  /* scale(1.25) would now grow the *padded* 44px button into its neighbour
+     rather than the dot, and setting `background` (shorthand) on .active
+     resets background-clip to border-box — so the active fill would cover
+     the whole button and read as an extra control. Colour carries the state. */
+  .hs-dot.active, .ts-dot.active { transform: none; background-clip: content-box; }
+  .hs-dots, .ts-dots { gap: 0; }
+  .hs-dots { bottom: var(--space-4); }
 }
 @media (max-width: 720px) {
-  .feature-grid, .sc-grid, .sc-grid.three, .to-grid, .loc-grid, .mg-grid, .steps, .form-grid, .gg-grid, .hours-body { grid-template-columns: 1fr; }
-  .gg-grid { grid-auto-rows: 200px; }
-  .gg-item.wide { grid-column: auto; }
-  .gal-grid { grid-template-columns: repeat(2, 1fr); }
-  .stat-grid { grid-template-columns: 1fr; gap: var(--space-8); }
+  /* 76px is a desktop bar. Retune the token rather than hardcoding a height:
+     --header-h is also read by the hero's viewport subtraction and by the
+     mega-panel's `top`. */
+  :root { --header-h: 60px; }
+
+  /* (Touch targets live in the 860px block. Below the drawer breakpoint this
+     is a touch device by the site's own reckoning — that is why the burger
+     appears — so a 19px link fails at 800px just as it does at 390. Scoping
+     them to 720 left the entire 721–860 band failing.) */
+
+  /* --- Card grids: paired only where the card's *contents* survive 145px.
+     Measured each one; the answer differs per grid and height alone is not
+     the test — line length decides it. --- */
+  .feature-grid, .loc-grid, .mg-grid, .steps, .form-grid, .hours-body { grid-template-columns: minmax(0, 1fr); }
+
+  /* Rooms on the home page: 2189 → 937px. Two-up with the blurb visible is
+     12 characters per line — a ragged column of single words — so the blurb
+     goes sr-only rather than display:none: the text stays in the DOM for
+     screen readers and search, and every card keeps its photo, name, rate
+     and "Check availability", which is what you scan a room grid for. The
+     full description is one tap away on /rooms/. */
+  .sc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+  .sc-body { padding: var(--space-4); }
+  .sc-head { flex-direction: column; align-items: flex-start; gap: 2px; }
+  /* "$329 / FROM / NIGHT" over three lines is a lot of card for a rate.
+     Put the qualifier inline beside the figure. */
+  .sc-rate { display: flex; align-items: baseline; gap: 6px; }
+  .sc-rate small { text-align: left; display: inline; }
+  /* "Check availability →" wraps to two lines with the arrow orphaned on a
+     third, which also leaves cards in the same row at different heights.
+     Tighten the tracking and keep the arrow with the last word. */
+  .sc-link { letter-spacing: 0; gap: 6px; white-space: nowrap; }
+  .sc-card p {
+    position: absolute; width: 1px; height: 1px;
+    overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
+  /* .sc-grid.three is the events "spaces" grid — same class, but THREE cards,
+     so two-up leaves an orphan and the saving collapses to 16px (1770 →
+     1754). Card count changes the answer; keep it one-up, and keep its body
+     copy visible since there is room for it. */
+  .sc-grid.three { grid-template-columns: minmax(0, 1fr); gap: var(--space-6); }
+  .sc-grid.three .sc-body { padding: var(--space-6); }
+  .sc-grid.three .sc-head { flex-direction: row; align-items: baseline; gap: var(--space-3); }
+  .sc-grid.three .sc-rate small { text-align: right; }
+  .sc-grid.three .sc-card p {
+    position: static; width: auto; height: auto;
+    overflow: visible; clip-path: none; white-space: normal;
+  }
+
+  /* Crew: 1932 → 646px. These are overlay cards, but unlike the ones that
+     broke on Ironwood the text sits in a normal-flow .to-info block with its
+     own padding, so it wraps instead of running off the photo. The bio is
+     hover-only and already hidden on touch; name and role stay legible. */
+  .to-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+  .to-info { padding: var(--space-4); }
+  /* The card is 191px two-up rather than 403px, so the name rides up to ~51%
+     of the card — into the faintest part of a gradient that only starts at
+     40%. Over a bright photo (white brick, a pale studio backdrop) the white
+     name loses contrast. Start the scrim higher and land it darker; this is
+     a consequence of the pairing above, so it belongs with it. */
+  .to-card::after { background: linear-gradient(180deg, transparent 12%, rgba(2,48,71,.55) 45%, rgba(2,48,71,.92)); }
+
+  /* Home gallery: 1745 → 805px, and the captions are hover overlays so line
+     length is unaffected. Keep the 2:1 tiles spanning both columns. */
+  .gg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 130px; gap: var(--space-3); }
+  .gg-item.wide { grid-column: span 2; }
+
+  /* NOT paired, each measured and rejected:
+       .mg-grid  — a name/price row is already only 18 CPL one-up; two-up is 9.
+       .loc-grid — three cards with bulleted lists: 1186 → 1516px. Worse.
+       .steps    — the numbered sentence IS the content. */
+  .gal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* Stats pair rather than stack — each cell is a number and two or three
+     words, which is comfortable well below 320px. Four stacked was 474px for
+     four figures. The ::after dividers are drawn between columns for the
+     desktop 4-up row and read as stray marks once the grid wraps. */
+  .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-8) var(--space-4); }
   .stat:not(:last-child)::after { display: none; }
   .section { padding: var(--space-12) var(--space-5); }
   .res-form { padding: var(--space-6); }
+
+  /* Section chrome — --space-16 of vertical padding is 128px per section and
+     there are six to nine of them per page. */
+  .section-head { margin-bottom: var(--space-8); }
+  .section-head p { font-size: var(--text-lg); }
+  /* Stack the alternating rows here, not at 980 — see the note there. Once
+     stacked, switch the photo to 16:9: a 4:3 crop at full width is 227px of
+     a 438px row, and these landscape photos read better wide anyway. Saves
+     ~230px per page. */
+  .fa-row { grid-template-columns: minmax(0, 1fr); gap: var(--space-5); }
+  .fa-row.flip .fa-media { order: 0; }
+  .fa-media { aspect-ratio: 16 / 9; }
+  .fa-rows { gap: var(--space-10); }
+  .fa-body p, .pillar p, .step p, .faq-a p { font-size: var(--text-base); line-height: var(--leading-relaxed); }
+  .faq-q { padding: var(--space-4) var(--space-5); font-size: var(--text-lg); }
+  .faq-a p { padding: 0 var(--space-5) var(--space-4); }
+  .loc-card { padding: var(--space-6); }
+  .mapembed .contact-card { padding: var(--space-6); }
+  .hours-body { padding: var(--space-5); }
+  .hours-head { padding: var(--space-4) var(--space-5); }
+  .ml-row { padding: var(--space-4) 0; }
+
+  /* min-height: 460px is sized against the contact card beside it on desktop.
+     Stacked there is nothing to match and it becomes half the section. */
+  .map-box { min-height: 300px; }
+  /* Likewise 480px on a stacked split hero. */
+  .hero-split .hs2-media { min-height: 260px; }
   /* Shorter on phones — a full-viewport hero is oppressive at this size.
      min-height so it still overrides the desktop rule above it. */
   .hero-slideshow { min-height: 88vh; min-height: 88svh; }
   .contact-bar { flex-direction: column; align-items: stretch; border-radius: var(--radius-xl); }
   .contact-bar .btn { justify-content: center; }
   .footer-inner { flex-direction: column; text-align: center; }
+
+  /* The menu row is a flex line with .ml-info and .ml-dots both flex:1, so
+     the dotted leader claims half the row — leaving the dish description
+     90px wide (12 characters per line) on a phone. Wrap the price onto its
+     own line and drop the leader: a dotted rule between a name and a price
+     is a wide-format device, and there is nothing left to lead across. */
+  .ml-row { flex-wrap: wrap; column-gap: var(--space-4); }
+  .ml-info { flex: 1 0 100%; }
+  .ml-dots { display: none; }
+  .ml-price { margin-top: 2px; font-size: var(--text-xl); }
+
+  /* clamp floors are desktop figures: clamp(2.6rem, 5vw, 4rem) puts 5vw at
+     16px on a 320px screen, so the 2.6rem *floor* wins and renders 41.6px
+     into a 272px column — eleven characters a line. Give each floor a mobile
+     value; the vw term still governs upward. */
+  .crumb-bar h1 { font-size: clamp(1.9rem, 7vw, 2.6rem); }
+  .section-head h2 { font-size: clamp(1.75rem, 6.5vw, 2.2rem); }
+  .hero-split .hs2-body h1 { font-size: clamp(1.9rem, 7vw, 2.4rem); }
+  .hero-slideshow h1 { font-size: clamp(2rem, 8vw, 2.6rem); }
+  /* max-width: 20ch is a desktop pull-quote device — at 21.6px that is a
+     217px ribbon inside a 390px viewport, breaking a 50-character sentence
+     across four lines while the section's full width sits unused beside it.
+     Let the quote use the column on a phone. */
+  .ts-slide blockquote { font-size: clamp(1.35rem, 5.5vw, 1.6rem); max-width: 100%; }
+  .cta-banner h2, .footer-cta h2 { font-size: clamp(1.75rem, 6.5vw, 2.2rem); }
 }
 
 /* =====================================================================

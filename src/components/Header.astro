@@ -14,7 +14,7 @@ const isActive = (href: string) => path === href;
       <span class="name">The Harrow House</span>
       <span class="est">Est. 1890</span>
     </a>
-    <nav class="mega-nav">
+    <nav class="mega-nav" aria-label="Primary">
       {
         navItems.map((item) => (
           <div class="mega-item">
@@ -53,7 +53,7 @@ const isActive = (href: string) => path === href;
     </nav>
     <div class="header-cta">
       <a class="btn" href="/rooms/">Book a Room</a>
-      <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">
         <span></span><span></span><span></span>
       </button>
     </div>
